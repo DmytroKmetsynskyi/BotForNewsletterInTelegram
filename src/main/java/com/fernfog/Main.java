@@ -1,16 +1,18 @@
 package com.fernfog;
 
 import com.moandjiezana.toml.Toml;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 
 public class Main {
@@ -36,7 +38,7 @@ public class Main {
 
         WebDriver driver = new FirefoxDriver(options);
 
-        driver.get("https://web.telegram.org/a/");
+        driver.get("https://web.telegram.org/k/");
         timer(20, "Увійдіть в свій акаунт");
 
         try {
@@ -51,10 +53,41 @@ public class Main {
 
         for (Object i: dataArray) {
             driver.findElement(By.partialLinkText(i.toString())).click();
-            timer(5, "TestTestTestTest");
+            timer(1, "Chat info");
+            driver.findElement(By.className("chat-info")).click();
+
+            List<WebElement> elements = driver.findElements(By.cssSelector(".row.no-wrap.row-with-padding.row-clickable.hover-effect.chatlist-chat.chatlist-chat-abitbigger"));
+
+            for (WebElement element : elements) {
+                element.click();
+                timer(2, "3223");
+
+                try {
+                    driver.findElement(By.xpath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div[4]/div/div[4]")).click();
+                    timer(2, "3223");
+                } catch (Exception e){
+                    logger.error(e.toString());
+                }
+
+                try {
+                    driver.findElement(By.xpath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div[4]/div/div[1]/div/div[8]/div[1]/div[1]")).click();
+                    driver.findElement(By.xpath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div[4]/div/div[1]/div/div[8]/div[1]/div[1]")).sendKeys("хто прочитав - гей", Keys.ENTER);
+                    timer(2, "3223");
+                } catch (Exception e){
+                    logger.error(e.toString());
+                }
+
+                WebElement buttonElement = driver.findElement(By.xpath("//button[contains(@class, 'btn-icon') and contains(@class, 'tgico-left') and contains(@class, 'sidebar-close-button')]"));
+
+                JavascriptExecutor executor = (JavascriptExecutor) driver;
+                executor.executeScript("arguments[0].scrollIntoView(true);", buttonElement);
+
+                executor.executeScript("arguments[0].click();", buttonElement);
+
+            }
         }
 
-        timer(123123, "aowdkjwlkd");
+        driver.quit();
 
     }
 
